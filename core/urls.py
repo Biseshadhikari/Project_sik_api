@@ -48,6 +48,7 @@ urlpatterns = [
     path('QandA/create/',CreateQandA.as_view()),
     path('QandA/update/<int:pk>/', UpdateQandA.as_view()),
     path('QandA/delete/<int:pk>/', DeleteQandA.as_view()),
+     path('lessonvideo/<int:pk>/QandA/',listQandA.as_view()),
     
     
     path('bookmarks/<str:choice>/<int:pk>/',BookmarkItem.as_view()),

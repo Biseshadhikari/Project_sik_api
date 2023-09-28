@@ -9,6 +9,7 @@ def apiOverview(request):
             "Create User": "/user/create/ [POST] - Create a new user account.",
             "Login User": "/user/login/ [POST] - Log in an existing user.",
             "Retrieve User": "/users/ [GET] - Retrieve a list of users.",
+			"Pending":"User detail view is yet to be added",
         },
         "Categories": {
             "Retrieve Categories": "/categories/ [GET] - Retrieve a list of categories.",

@@ -24,10 +24,11 @@ class LoginUserView(APIView):
         # request.data (email, password)
         serializer = UserLoginSerializer(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             try:
                 user = User.objects.get(email=serializer.validated_data["email"])
                 # print(user.is_admin)
+                print(user)
                 
                 if user.check_password(serializer.validated_data["password"]):
                     token = Token.objects.get_or_create(user=user)
@@ -56,3 +57,5 @@ class RetrieveUser(APIView):
         
         return Response({'user':serializer.data})
     
+
+
