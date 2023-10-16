@@ -128,3 +128,11 @@ class Bookmarkserializers(serializers.ModelSerializer):
         model = Bookmark
         exclude = ('lesson','video')
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+
+from .models import PasswordResetOTP
+
+class PasswordResetOTPSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PasswordResetOTP
+        fields = '__all__'

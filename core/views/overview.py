@@ -54,6 +54,10 @@ def apiOverview(request):
             "Bookmarks Detail": "/bookmarks/<str:choice>/ [GET] - Retrieve bookmarks by type.",
             "Delete Bookmark": "/bookmarks/delete/<int:pk>/ [DELETE] - Delete a bookmark by ID.",
         },
+		'Forgot Password-related endpoints': {
+            'Send OTP': '/send-otp/ (email is the only field)',
+            'Verify OTP and Reset Password': '/verify-otp/ (email,otp,newpassword are the fields)',
+        },
 		
 		}
 

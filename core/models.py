@@ -112,6 +112,12 @@ class Bookmark(models.Model):
     choice = models.CharField(choices=choice,max_length=30)
 
 
+class PasswordResetOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 
 
 

@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8hdk-pnnl9($r&k!igq0vl7%+uxctl^*b*-5x#slnd)i3#0y_1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'core',
     'rest_framework',
-    'rest_framework_swagger'
+
 ]
 AUTH_USER_MODEL = 'core.User'
 
@@ -138,3 +138,10 @@ REST_FRAMEWORK = {
 
   'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'biseshadhikari0@gmail.com'
+EMAIL_HOST_PASSWORD = 'xpczhaqdblaxzoon' 

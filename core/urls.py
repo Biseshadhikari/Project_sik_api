@@ -8,6 +8,8 @@ from core.views.lessonvideo import *
 from core.views.bookmark import *
 from core.views.notes import *
 from core.views.QandA import *
+from core.views.forgotpassword import *
+
 from core.views.overview import apiOverview
 urlpatterns = [
     path('',apiOverview),
@@ -55,6 +57,9 @@ urlpatterns = [
     path('bookmarks/',Bookmarks.as_view()),
     path('bookmarks/<str:choice>/',BookmarksDetail.as_view()),
     path('bookmark/delete/<int:pk>/',BookmarkDelete.as_view()),
+
+    path('send-otp/', SendPasswordResetEmailView.as_view(), name='send-otp'),
+    path('verify-otp/', VerifyPasswordResetOTPView.as_view(), name='verify-otp'),
 
     
     
