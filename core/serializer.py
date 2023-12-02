@@ -116,7 +116,7 @@ class CourseSerializers(serializers.ModelSerializer):
     class Meta:
         model = Course
         # fields = ['title','description','image','category']
-        fields = ('id','title','description','image','Category','lessons')
+        fields = ('id','title','description','image','Category','lessons','status','language')
         # depth = 2
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
@@ -135,4 +135,11 @@ from .models import PasswordResetOTP
 class PasswordResetOTPSerializer(serializers.ModelSerializer):
     class Meta:
         model = PasswordResetOTP
+        fields = '__all__'
+
+
+
+class BookMarkDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookMarkCheck
         fields = '__all__'

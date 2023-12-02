@@ -23,28 +23,34 @@ class BookmarkItem(APIView):
             if course:
                 bookmark = Bookmark.objects.filter(user = request.user,course = course,choice= choice,saved_id = pk).first()
                 if bookmark:
-
-                    return Response({'error':"already added to bookmark"})
+                    bookmark.delete()
+                    return Response({'message':"bookmark removed","bookmarked":False})
                 else:
                     bm = Bookmark(user = request.user,course = course,choice= choice,saved_id = pk)
                     bm.save()
-                    return Response({'success':"added to bookmark"})
+                    bmcheck = BookMarkCheck(user = request.user,course = course,types = choice,isBookmarked = True,bookmark = bm)
+                    bmcheck.save()
+                    return Response({'message':"added to bookmark","bookmarked":False})
             else:
-                return Response({'error':"course not found"})
+                return Response({'message':"course not found"})
 
         elif choice == "lesson":
             lesson = Lesson.objects.filter(id = pk).first()
             if lesson:
                 bookmark =Bookmark.objects.filter(user = request.user,lesson = lesson,choice= choice,saved_id = pk).first()
                 if bookmark:
-                    return Response({'error':"already added to bookmark"})
+                    bookmark.delete()
+                    return Response({'message':"bookmark removed","bookmarked":False})
                 else:
                     bm = Bookmark(user = request.user,lesson = lesson,choice= choice,saved_id = pk)
                     bm.save()
-                    return Response({'success':"added to bookmark"})
+                    bmcheck = BookMarkCheck(user = request.user,lesson = lesson,types = choice,isBookmarked = True,bookmark = bm)
+                    bmcheck.save()
+                    
+                    return Response({'message':"added to bookmark","bookmarked":False})
                     
             else:
-                return Response({'error':"lesson not found"})
+                return Response({'message':"lesson not found"})
                 
         elif choice == "video":
             lessonvideo = lessonVideo.objects.filter(id = pk).first()
@@ -52,16 +58,17 @@ class BookmarkItem(APIView):
                     
                 bookmark =Bookmark.objects.filter(user = request.user, video= lessonvideo,choice= choice,saved_id = pk).first()
                 if bookmark:
-                    return Response({'error':"already added to bookmark"})
+                    bookmark.delete()
+                    return Response({'message':"bookmark removed","bookmarked":False})
                 else:
                     bm = Bookmark(user = request.user, video= lessonvideo,choice= choice,saved_id = pk)
                     bm.save()
-                    return Response({'success':"added to bookmark"})
+                    return Response({'message':"added to bookmark","bookmarked":False})
             else:
-                return Response({'error':"video not found"})
+                return Response({'message':"video not found"})
 
         else:
-            return Response({'error':"Noting found"})
+            return Response({'message':"Noting found"})
 
 
 
@@ -76,10 +83,10 @@ class Bookmarks(generics.RetrieveAPIView):
             print(bookmark)
             
             serializer = self.serializer_class(bookmark, many=True)
-            return Response({ "success": True, "Bookmarks": serializer.data })
+            return Response({ "message": True, "Bookmarks": serializer.data })
         except:
             return Response({ 
-                "error":"Related bookamrks not available"
+                "message":"Related bookamrks not available"
             })
     
 class BookmarksDetail(APIView):
@@ -90,20 +97,20 @@ class BookmarksDetail(APIView):
     #         bookmark = Bookmark.objects.filter(user = request.user)
             
     #         serializer = Bookmarkserializers(bookmark, many=True)
-    #         return Response({ "success": True, "Bookmarks": serializer.data })
+    #         return Response({ "message": True, "Bookmarks": serializer.data })
     #     except:
     #         return Response({ 
-    #             "error":"Related bookamrks not available"
+    #             "message":"Related bookamrks not available"
     #         })
     def get(self,request,choice):
         try : 
             bookmark = Bookmark.objects.filter(user = request.user,choice= choice)
             
             serializer = Bookmarkserializers(bookmark, many=True)
-            return Response({ "success": True, "Bookmarks": serializer.data })
+            return Response({ "message": True, "Bookmarks": serializer.data })
         except:
             return Response({ 
-                "error":"Related bookamrks not available"
+                "message":"Related bookamrks not available"
             })
 
 class BookmarkDelete(APIView):
@@ -114,10 +121,10 @@ class BookmarkDelete(APIView):
     #         bookmark = Bookmark.objects.filter(user = request.user)
             
     #         serializer = Bookmarkserializers(bookmark, many=True)
-    #         return Response({ "success": True, "Bookmarks": serializer.data })
+    #         return Response({ "message": True, "Bookmarks": serializer.data })
     #     except:
     #         return Response({ 
-    #             "error":"Related bookamrks not available"
+    #             "message":"Related bookamrks not available"
     #         })
     def delete(self, request, *args, **kwargs):
         try : 
@@ -126,9 +133,44 @@ class BookmarkDelete(APIView):
             print(bookmark)
             
             bookmark.delete()
-            return Response({ "success": True, "Bookmarks": "deleted" })
+            return Response({ "message": True, "Bookmarks": "deleted" })
         except:
             return Response({ 
-                "error":"Related bookamrks not available"
+                "message":"Related bookamrks not available"
             })
         
+
+class BookmarkDetail(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self,request,choice,pk):
+        try : 
+            if choice =="course":
+                course = Course.objects.get(id = pk)
+                # print(course)
+                bookmark = Bookmark.objects.filter(course = course,user = request.user,choice = choice).first()
+                print(bookmark)
+                serializer = Bookmarkserializers(bookmark )
+                if bookmark:
+                    return Response({ "message": True, "Bookmarks_Detail": serializer.data,"bookmarked":True })
+                else:
+                    return Response({ "message": True, "Bookmarks_Detail": serializer.data,"bookmarked":False })
+            elif choice == "lesson":
+                lesson = Lesson.objects.get(id = pk)
+                # print(course)
+                bookmark = Bookmark.objects.filter(lesson = lesson,user = request.user,choice = choice).first()
+                print(bookmark)
+                serializer = Bookmarkserializers(bookmark)
+                if bookmark:
+                    return Response({ "message": True, "Bookmarks_Detail": serializer.data,"bookmarked":True })
+                else:
+                    return Response({ "message": True, "Bookmarks_Detail": serializer.data,"bookmarked":False })
+            
+
+
+
+        except:
+            return Response({ 
+                "message":"Related bookamrks not available",
+                "bookmarked":False
+            })

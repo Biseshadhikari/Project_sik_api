@@ -21,9 +21,9 @@ class listQandA(generics.ListAPIView):
 
     def get(self, request,pk):
         try : 
-            video = lessonVideo.objects.get(id = pk)
+            course = Course.objects.get(id = pk)
             # print(lesson)
-            qanda = QandA.objects.filter(video = video)
+            qanda = QandA.objects.filter(course = course)
             # print(lessonvideo)
             serializer = QandASerializer(qanda, many=True)
             return Response({ "success": True, "QAndA": serializer.data })

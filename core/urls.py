@@ -27,6 +27,7 @@ urlpatterns = [
     path('courses/', RetrieveCourse.as_view()),
     path('course/update/<int:pk>/', UpdateCourse.as_view()),
     path('course/delete/<int:pk>/', DeleteCourse.as_view()),
+    path('course/category/<int:pk>/', RetrieveCourseByCategory.as_view()),
 
     path('lesson/create/', Createlessons.as_view()),
     path('courses/<int:pk>/lessons/', listLessons.as_view()),
@@ -50,13 +51,14 @@ urlpatterns = [
     path('QandA/create/',CreateQandA.as_view()),
     path('QandA/update/<int:pk>/', UpdateQandA.as_view()),
     path('QandA/delete/<int:pk>/', DeleteQandA.as_view()),
-     path('lessonvideo/<int:pk>/QandA/',listQandA.as_view()),
+     path('course/<int:pk>/QandA/',listQandA.as_view()),
     
     
     path('bookmarks/<str:choice>/<int:pk>/',BookmarkItem.as_view()),
     path('bookmarks/',Bookmarks.as_view()),
     path('bookmarks/<str:choice>/',BookmarksDetail.as_view()),
     path('bookmark/delete/<int:pk>/',BookmarkDelete.as_view()),
+    path('bookmarkdetail/<str:choice>/<int:pk>/',BookmarkDetail.as_view()),
 
     path('send-otp/', SendPasswordResetEmailView.as_view(), name='send-otp'),
     path('verify-otp/', VerifyPasswordResetOTPView.as_view(), name='verify-otp'),

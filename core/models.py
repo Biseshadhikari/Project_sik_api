@@ -43,7 +43,7 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-
+status = (('ongoing','ongoing'),('Completed','Completed'))
 class Course(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
@@ -52,6 +52,8 @@ class Course(models.Model):
     Category = models.ForeignKey(Category,on_delete=models.CASCADE)
     created  = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    status = models.CharField(choices=status,max_length=200,default="ongoing")
+    language = models.CharField(max_length=200,default="English")
 
     def __str__(self):
         return self.title
@@ -79,6 +81,8 @@ class lessonVideo(models.Model):
     title = models.CharField(max_length=200,blank = True,null = True)
     video_id = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    image = models.ImageField(upload_to="thumbnail",blank=True,null = True)
+    description = models.TextField(null = True,blank=True)
     class Meta:
       get_latest_by = "created_at"
     
@@ -97,7 +101,7 @@ class Notes(models.Model):
 class QandA(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
 
-    video  = models.ForeignKey(lessonVideo,on_delete=models.CASCADE)
+    course  = models.ForeignKey(Course,on_delete=models.CASCADE,null = True,blank=True)
     question = models.CharField(max_length=100)
     answer = models.CharField(max_length=200)
 
@@ -118,6 +122,11 @@ class PasswordResetOTP(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-
-
-
+class BookMarkCheck(models.Model): 
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,null = True,blank = True)
+    lesson = models.ForeignKey(Lesson,on_delete=models.CASCADE,null = True,blank = True)
+    bookmark = models.ForeignKey(Bookmark,on_delete=models.CASCADE,null = True,blank = True)
+    lessonvideo = models.ForeignKey(lessonVideo,on_delete=models.CASCADE,null = True,blank = True)
+    types = models.CharField(max_length=200)
+    isBookmarked = models.BooleanField(default=False)

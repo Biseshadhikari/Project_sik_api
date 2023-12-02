@@ -28,11 +28,11 @@ class LoginUserView(APIView):
             try:
                 user = User.objects.get(email=serializer.validated_data["email"])
                 # print(user.is_admin)
-                print(user)
+                print(user.is_admin )
                 
                 if user.check_password(serializer.validated_data["password"]):
                     token = Token.objects.get_or_create(user=user)
-                    return Response({ "success": True, "token": token[0].key })
+                    return Response({ "success": True, "token": token[0].key,"admin":user.is_admin  })
                 else:
                     return Response({ "success": False, "message": "incorrect password" })
             except ObjectDoesNotExist:

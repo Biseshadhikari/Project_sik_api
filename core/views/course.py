@@ -64,7 +64,7 @@ class RetrieveCourse(APIView):
     def get(self,request): 
         course = Course.objects.all()
       
-        serializer = CourseSerializer(course,many = True)
+        serializer = CourseSerializers(course,many = True)
 
         return Response({'courses':serializer.data})
 
@@ -78,6 +78,7 @@ class visitCourse(generics.RetrieveAPIView):
             course = Course.objects.get(id = pk)
             print(course)
             
+            
             serializer = CourseSerializers(course)
             return Response({"course": serializer.data })
             
@@ -86,3 +87,16 @@ class visitCourse(generics.RetrieveAPIView):
         except:
             return Response({"error":"course not found"})
 
+class RetrieveCourseByCategory(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request,**kwargs): 
+        pk = kwargs['pk']
+        category = Category.objects.get(pk = pk)
+        
+        course = Course.objects.filter(Category=category)
+      
+        serializer = CourseSerializer(course,many = True)
+
+        return Response({'courses':serializer.data})
