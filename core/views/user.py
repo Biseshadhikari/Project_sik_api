@@ -13,9 +13,23 @@ from rest_framework.response import Response
 
 
 
-class CreateUser(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class CreateUser(APIView):
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            try:
+                
+                user = User.objects.get(email=serializer.validated_data["email"])
+                return Response({ "success": False, "message": "User with this email already exists." }, status=status.HTTP_400_BAD_REQUEST)
+            except ObjectDoesNotExist:
+                user = User.objects.create_user(
+                    email=serializer.validated_data["email"],
+                    username=serializer.validated_data["username"],
+                    password=serializer.validated_data["password"]
+                )
+                
+                return Response({ "success": True,})
 
 
 class LoginUserView(APIView):

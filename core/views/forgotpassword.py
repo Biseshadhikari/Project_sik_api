@@ -22,7 +22,7 @@ class SendPasswordResetEmailView(generics.CreateAPIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return Response({'message': 'User with this email does not exist.'})
+            return Response({'message': 'User with this email does not exist.',"success":False})
         
         # Generate a random OTP
         otp = ''.join(random.choice('0123456789') for _ in range(6))
@@ -38,7 +38,7 @@ class SendPasswordResetEmailView(generics.CreateAPIView):
         
         send_mail(subject, message, email_from, recipient_list, fail_silently=False)
         
-        return Response({'message': 'Email sent with OTP.'})
+        return Response({'message': 'Email sent with OTP.',"success":True})
     
 class VerifyPasswordResetOTPView(generics.UpdateAPIView):
     serializer_class = PasswordResetOTPSerializer
@@ -52,18 +52,18 @@ class VerifyPasswordResetOTPView(generics.UpdateAPIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return Response({'message': 'User with this email does not exist.'})
+            return Response({'message': 'User with this email does not exist.',"success":False})
         
         try:
             reset_otp = PasswordResetOTP.objects.get(user=user, otp=otp)
         except PasswordResetOTP.DoesNotExist:
-            return Response({'message': 'Invalid OTP.'})
+            return Response({'message': 'Invalid OTP.',"success":False})
         
         # Check if OTP is still valid (e.g., within a certain time frame)
         expiration_time = reset_otp.created_at + timedelta(minutes=15)  # OTP expires in 15 minutes
         
         if timezone.now() > expiration_time:
-            return Response({'message': 'OTP has expired.'})
+            return Response({'message': 'OTP has expired.',"success":False})
         
         # Reset the user's password (You can replace this logic with your own password reset code)
         new_password = newpassword  # Generate a new password
@@ -73,5 +73,5 @@ class VerifyPasswordResetOTPView(generics.UpdateAPIView):
         # Delete the used OTP
         reset_otp.delete()
         
-        return Response({'message': 'Password reset successfully.'})
+        return Response({'message': 'Password reset successfully.',"success":True})
 

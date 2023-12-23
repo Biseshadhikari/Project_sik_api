@@ -43,6 +43,7 @@ urlpatterns = [
 
 
     path('note/create/',CreateNotes.as_view()),
+    path('note/<int:pk>/',noteDetail.as_view()),
     path('note/update/<int:pk>/', UpdateNotes.as_view()),
     path('note/delete/<int:pk>/', Deletenote.as_view()),
     path('lessonvideo/<int:pk>/note/',listNotes.as_view()),

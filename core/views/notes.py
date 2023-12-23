@@ -31,6 +31,25 @@ class listNotes(generics.ListAPIView):
             })
         
 
+
+class noteDetail(generics.ListAPIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request,pk):
+        try : 
+            
+            # print(lesson)
+            note = Notes.objects.filter(id = pk).first()
+            # print(lessonvideo)
+            serializer = NotesSerializer(note)
+            return Response({ "success": True, "note": serializer.data })
+        except:
+            return Response({ 
+                "error":"Related note not available"
+            })
+
 class UpdateNotes(generics.UpdateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated,IsAdminUser]
